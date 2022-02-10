@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="103333a3-25f0-423f-b74a-ad26ff61d835">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="249"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="telefono" class="java.lang.String"/>
+	<parameter name="montocuota" class="java.lang.String"/>
+	<parameter name="fechalimitepago" class="java.lang.String"/>
+	<parameter name="nrocuota" class="java.lang.String"/>
+	<parameter name="montopagado" class="java.lang.String"/>
+	<parameter name="montodebe" class="java.lang.String"/>
+	<parameter name="fondoimagen" class="java.lang.String"/>
+	<parameter name="EstadoCuota" class="java.lang.String"/>
+	<parameter name="EstadoCuenta" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="114" splitType="Stretch">
+			<staticText>
+				<reportElement x="226" y="10" width="239" height="39" uuid="2cf09841-fd64-4200-9853-755256e98bbe"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resumen de pago]]></text>
+			</staticText>
+			<image>
+				<reportElement x="11" y="10" width="300" height="92" uuid="a7863667-daff-4a5a-a4d5-27b4a0e22d81"/>
+				<imageExpression><![CDATA[$P{fondoimagen}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="10" y="0" width="545" height="20" forecolor="#FFFFFF" backcolor="#5594E9" uuid="de79d45e-d6fd-45bc-8110-751a86a37ad6"/>
+				<text><![CDATA[NOTA : Recuerde siempre abonar en tiempo y forma las cuotas del prestamos y evitar intereses en la cuenta.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="332" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="20" width="100" height="20" uuid="794d0e0c-3eb1-4653-ae86-ff1c5d31f6fb"/>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="20" width="100" height="20" uuid="4502e02f-eff4-4fa3-9e71-6a1e45ae6c0a"/>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="246" y="20" width="100" height="20" uuid="9f236ed9-2975-476a-b89f-0c6d70d91aa8"/>
+				<text><![CDATA[cel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="298" y="20" width="100" height="20" uuid="beb7cc57-f208-4f51-908a-c178cbca31ba"/>
+				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="71" width="116" height="20" uuid="f95fdbf2-a53a-41db-b0c7-ed09c486ed8c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informacion del pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="91" width="100" height="20" uuid="9c14ea6d-9cf0-45d2-a928-040ec15e9282"/>
+				<text><![CDATA[Monto pagar:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="86" y="91" width="100" height="20" uuid="ce30e370-6e30-4faa-abd9-60629541fd69"/>
+				<textFieldExpression><![CDATA[$P{montocuota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="186" y="91" width="100" height="20" uuid="0df6676c-9759-4166-b41a-6b1ba9c9e395"/>
+				<text><![CDATA[Fecha limite pago:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="286" y="91" width="100" height="20" uuid="797b39f9-5538-4e88-9dfe-61c5522d3b03"/>
+				<textFieldExpression><![CDATA[$P{fechalimitepago}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="398" y="91" width="37" height="20" uuid="4b3dac25-b8a1-48a9-90a3-2b6d224164ec"/>
+				<text><![CDATA[Cuota:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="434" y="91" width="100" height="20" uuid="1bd53044-27a4-486b-b4f6-4b74482612e5"/>
+				<textFieldExpression><![CDATA[$P{nrocuota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="0" width="139" height="20" uuid="0f0e7d94-c94b-43db-90f4-35f779d19042"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informacion del cliente]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="52" width="534" height="1" uuid="d6cb542a-da9a-4917-b4df-7ffe1849ae2d"/>
+			</line>
+			<staticText>
+				<reportElement x="11" y="162" width="100" height="20" uuid="b1d52ec1-234d-4b4d-93be-2094a50a9c85"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado de cuenta]]></text>
+			</staticText>
+			<line>
+				<reportElement x="11" y="144" width="533" height="1" uuid="604ead8b-78fc-46b6-a5b6-9dcbf82800f9"/>
+			</line>
+			<staticText>
+				<reportElement x="19" y="182" width="80" height="20" uuid="2717b0be-68fe-44a7-9313-977ee7fd5be9"/>
+				<text><![CDATA[Saldo pagado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="182" width="63" height="20" uuid="ae2d2eee-6cd8-4b9b-a967-f08c30484141"/>
+				<text><![CDATA[Saldo debe:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="111" y="182" width="100" height="20" uuid="23fa71bb-3491-4bfa-92b8-6cf077b61030"/>
+				<textFieldExpression><![CDATA[$P{montopagado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="311" y="182" width="15" height="20" uuid="0dfe0206-a9ef-46cb-b259-2ce525e0e1e9"/>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="99" y="182" width="22" height="20" uuid="e2d22567-5bc9-4420-8fad-aae94ddf9a3f"/>
+				<text><![CDATA[$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="326" y="182" width="83" height="20" uuid="fd213978-e2fb-4517-b3c0-8636f5a06b76"/>
+				<textFieldExpression><![CDATA[$P{montodebe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="108" width="100" height="20" uuid="74d850cb-1abd-4069-a676-f3ad453d7cb0"/>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="202" width="100" height="20" uuid="c082f7da-90ba-4566-80c4-e6aad39f2409"/>
+				<text><![CDATA[Estado cuenta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="99" y="202" width="100" height="20" uuid="34c07d61-2751-4237-a9cd-1d5d04ea5ba7"/>
+				<textFieldExpression><![CDATA[$P{EstadoCuenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="108" width="100" height="20" uuid="e347520b-95e1-4973-b105-800d3479f27f"/>
+				<textFieldExpression><![CDATA[$P{EstadoCuota}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="54" backcolor="#999999" uuid="f8b8bb2f-6e2c-4696-b951-96a48869c376"/>
+				<textField>
+					<reportElement x="434" y="18" width="100" height="20" forecolor="#000000" uuid="2f1b8a37-0ec3-4f7d-9d50-b829a49bb7f2"/>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="19" y="18" width="100" height="20" forecolor="#000000" uuid="d494bebf-46dc-4135-88bc-3d1cc06d081f"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="286" y="18" width="100" height="20" uuid="95e972d3-cec9-40f3-8b3d-1df5201b24e3"/>
+					<text><![CDATA[Resistencia - Chaco]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

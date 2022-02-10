@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dcb05870-32c0-4ad3-8f14-36d5cd026390">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="nombre" class="java.lang.String"/>
+	<parameter name="apellido" class="java.lang.String"/>
+	<parameter name="telefono" class="java.lang.String"/>
+	<parameter name="fondoimagen" class="java.lang.String"/>
+	<parameter name="fecharegistro" class="java.lang.String"/>
+	<parameter name="montosolicitado" class="java.lang.String"/>
+	<parameter name="formapago" class="java.lang.String"/>
+	<parameter name="cantidadcuotas" class="java.lang.String"/>
+	<parameter name="estadocuenta" class="java.lang.String"/>
+	<parameter name="saldopagado" class="java.lang.String"/>
+	<parameter name="saldodebe" class="java.lang.String"/>
+	<field name="idprestamo" class="java.lang.Integer"/>
+	<field name="monto" class="java.lang.Double"/>
+	<field name="fechapago" class="java.util.Date"/>
+	<field name="estadocuota" class="java.lang.String"/>
+	<field name="numero_cuota" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="77" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="60" forecolor="#000000" backcolor="#FFFFFF" uuid="df667ee5-abbb-4a1d-b6b5-9ffb4c093ccc"/>
+				<staticText>
+					<reportElement x="256" y="0" width="222" height="33" forecolor="#000000" uuid="55b5b8a1-1289-44a5-a5a0-7b5e77b08bb8"/>
+					<textElement textAlignment="Center">
+						<font size="24"/>
+					</textElement>
+					<text><![CDATA[Estado del prestamo]]></text>
+				</staticText>
+				<image>
+					<reportElement x="22" y="0" width="207" height="50" uuid="76fd74c7-acd9-49be-9a1a-c8d9775a6e8b"/>
+					<imageExpression><![CDATA[$P{fondoimagen}]]></imageExpression>
+				</image>
+			</frame>
+			<line>
+				<reportElement x="1" y="68" width="553" height="1" uuid="8aa57ac9-3bf1-4aa7-9688-596f6e6c64c4"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="139" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="100" height="20" uuid="801ede58-5b77-429a-aab4-33e22f53c734"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos del cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="22" width="51" height="20" uuid="bda3fb6a-53a4-4985-bf49-14ee91f501af"/>
+				<text><![CDATA[nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="22" width="44" height="20" uuid="ac02d06b-a3e6-4279-a4aa-321e70b5a101"/>
+				<text><![CDATA[Apellido:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="22" width="56" height="20" uuid="10ba5947-7e8c-4d1f-bb7d-fe0705bc30e0"/>
+				<text><![CDATA[Telefono:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="55" width="555" height="1" uuid="efb30c76-414c-4236-ae85-3e95afc6acb5"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="56" width="100" height="20" uuid="3692e84b-46ba-4073-9452-290f742272b3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos del prestamo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="76" width="100" height="20" uuid="ae8213b3-7424-49f3-958f-d6b02ba0d85b"/>
+				<text><![CDATA[Fecha de registro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="90" width="100" height="20" uuid="ff64c2e1-3238-4ba1-9cc4-6fb0167196fd"/>
+				<text><![CDATA[Monto solicitado:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="106" width="100" height="20" uuid="12188dc3-36a8-4656-a556-a35b388b7b01"/>
+				<text><![CDATA[Forma de pago:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="209" y="76" width="100" height="20" uuid="f1648550-906c-434e-909e-31ced32de523"/>
+				<text><![CDATA[Cantidad de cuotas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="209" y="90" width="100" height="20" uuid="6603cfc3-9a63-4462-8662-b5aee5c9cace"/>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="6" y="126" width="549" height="1" uuid="6ccc94a1-97eb-4b35-abbf-3da75ef4524f"/>
+			</line>
+			<textField>
+				<reportElement x="52" y="22" width="100" height="20" uuid="cc5508d5-9463-4651-9f48-37429cda21da"/>
+				<textFieldExpression><![CDATA[$P{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="174" y="22" width="67" height="20" uuid="94574541-3658-4af0-8d18-01670dc91a1b"/>
+				<textFieldExpression><![CDATA[$P{apellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="22" width="73" height="20" uuid="bdefbc83-be45-4881-88c6-6c254d6609d6"/>
+				<textFieldExpression><![CDATA[$P{telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="76" width="100" height="20" uuid="2c2ef4b4-d374-476f-8696-7a6bef7b688b"/>
+				<textFieldExpression><![CDATA[$P{fecharegistro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="90" width="100" height="20" uuid="8e5dab34-4008-4092-9333-6afd3b799cce"/>
+				<textFieldExpression><![CDATA[$P{montosolicitado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="106" width="100" height="20" uuid="8b8b6738-7617-452a-90d7-2e3ae7bd541f"/>
+				<textFieldExpression><![CDATA[$P{formapago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="309" y="76" width="100" height="20" uuid="8368b4a5-c706-4269-9a91-13a4aeebefee"/>
+				<textFieldExpression><![CDATA[$P{cantidadcuotas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="253" y="90" width="100" height="20" uuid="189fdef1-31f0-4c30-885b-0868d8a1f906"/>
+				<textFieldExpression><![CDATA[$P{estadocuenta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="65" splitType="Stretch">
+			<staticText>
+				<reportElement x="156" y="31" width="85" height="20" uuid="d1dd7e35-dab4-4cbd-a97a-dc4f20d1ea34"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[monto por cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="74" y="31" width="100" height="20" uuid="79116813-0bdc-413f-b452-f39c309e2e98"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="31" width="64" height="20" uuid="54afb472-d2c5-41fa-bff0-9789e2f8fca9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro prestamo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="256" y="31" width="35" height="20" uuid="dd9f1fa5-459b-406b-98d1-2be135577e03"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="326" y="31" width="100" height="20" uuid="f4094fe4-d999-48b8-be89-2c83ad6b1b1b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro cuota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="11" width="100" height="20" uuid="2e9e8767-b60e-4f28-b52d-21484531d004"/>
+				<textElement>
+					<font isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Detalle de pagos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<textField>
+				<reportElement x="74" y="0" width="100" height="20" uuid="0e49a089-16c8-4707-9622-d4333f03cb64"/>
+				<textFieldExpression><![CDATA[$F{fechapago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="156" y="0" width="100" height="20" uuid="d9023c87-fba3-4b33-b0fa-36d9d484e81b"/>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="0" width="100" height="20" uuid="85b986e3-3522-4286-bf07-5c196df17fae"/>
+				<textFieldExpression><![CDATA[$F{idprestamo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="253" y="0" width="100" height="20" uuid="0745b3d6-f7a5-4a9c-9781-4fe772f4ce6a"/>
+				<textFieldExpression><![CDATA[$F{estadocuota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="341" y="0" width="100" height="20" uuid="34a19439-5814-4023-88a8-1df865ecc69a"/>
+				<textFieldExpression><![CDATA[$F{numero_cuota}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<rectangle>
+				<reportElement x="1" y="12" width="553" height="20" uuid="cd0aad3c-9bb9-496b-8ae5-5ff59f0cd883"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="30" y="18" width="100" height="20" uuid="a9512e04-cf05-4845-b406-838b50bcb3d1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[saldo pagado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="191" y="18" width="100" height="20" uuid="241e2ccf-7434-47fb-a2d8-38fe4b71a329"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[saldo debe:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="18" width="100" height="20" uuid="a5240ed4-1254-4408-82f3-59ea4bcc7511"/>
+				<textFieldExpression><![CDATA[$P{saldopagado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="256" y="18" width="100" height="20" uuid="c2323df6-f94e-40ba-9c11-6adb7383ca9f"/>
+				<textFieldExpression><![CDATA[$P{saldodebe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="14" width="554" height="40" backcolor="#999999" uuid="f8813045-8476-4127-86ac-a4f280a1f69f"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="22" y="10" width="100" height="20" uuid="b4ecbbab-4f11-42d1-b536-6e051a69ee83"/>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="454" y="10" width="100" height="20" uuid="f77446e3-b12b-4bdb-8306-2fbc349c326a"/>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="226" y="10" width="100" height="20" uuid="0c154bf8-54b9-4bb3-8ca9-d409e9a55d09"/>
+					<text><![CDATA[Resistencia - Chaco]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
