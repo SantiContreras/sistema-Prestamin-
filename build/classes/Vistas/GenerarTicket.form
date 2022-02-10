@@ -361,7 +361,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jScrollPane2" pref="697" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
-                  <Component id="jButton2" min="-2" pref="148" max="-2" attributes="0"/>
+                  <Component id="btneliminar" min="-2" pref="148" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btnImprimirTicket" min="-2" pref="122" max="-2" attributes="0"/>
                   <EmptySpace pref="417" max="32767" attributes="0"/>
@@ -381,7 +381,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnImprimirTicket" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btneliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -486,13 +486,16 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImprimirTicketActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btneliminar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Iconos/cancelar4.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="eliminar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneliminarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

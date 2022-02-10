@@ -126,7 +126,7 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
         tablaticket = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         btnImprimirTicket = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btneliminar = new javax.swing.JButton();
         btnagregar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         checkSeleccioanrTodo = new javax.swing.JCheckBox();
@@ -258,8 +258,13 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cancelar4.png"))); // NOI18N
-        jButton2.setText("eliminar");
+        btneliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cancelar4.png"))); // NOI18N
+        btneliminar.setText("eliminar");
+        btneliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -267,7 +272,7 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnImprimirTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(417, Short.MAX_VALUE))
@@ -284,7 +289,7 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnImprimirTicket)
-                    .addComponent(jButton2))
+                    .addComponent(btneliminar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -521,6 +526,12 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnImprimirTicketActionPerformed
 
+    private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
+        int selec = tablaticket.getSelectedRow();
+        clientestick.remove(selec);
+        modelo3.removeRow(selec);
+    }//GEN-LAST:event_btneliminarActionPerformed
+
     public void filtro() {
         int columnanombre = 1;
         trs.setRowFilter(RowFilter.regexFilter("(?i)" + txtfiltro.getText(), columnanombre));
@@ -560,9 +571,9 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImprimirTicket;
     private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btneliminar;
     private javax.swing.JCheckBox checkSeleccioanrTodo;
     private javax.swing.JLabel fechahoy;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
