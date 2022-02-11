@@ -17,6 +17,8 @@ import configuracion.ColorearHeaderCuotaTikect;
 import configuracion.Fecha;
 import configuracion.FechaNueva;
 import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +30,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -49,6 +53,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
     Prestamo prestamo = new Prestamo();
     Cliente cliente = new Cliente();
     Cuota cuota = new Cuota();
+    Clausulas cla = new Clausulas();
     
     String fechaImpresion;
     ArrayList<Cuotaimpresion> Listaimpresion = new ArrayList();
@@ -64,7 +69,9 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
     ColorearHeader CH = new ColorearHeader();
     ColorearFilas colorear = new ColorearFilas();
     String formapago;
+    String texto;
     int id;
+    TableRowSorter trs;
      ColorearHeaderCuotaTikect ColorHeaderTicket = new ColorearHeaderCuotaTikect();
     
     public NuevoPrestamo() {
@@ -133,10 +140,9 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         jLabel13 = new javax.swing.JLabel();
         txtmontomensual = new javax.swing.JTextField();
         btnGenerarCuota = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnclausulas = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        txtdnibuscar = new javax.swing.JTextField();
-        btnBuscarCliente = new javax.swing.JButton();
+        txtfiltro = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaclientes = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
@@ -147,7 +153,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         jLabel17 = new javax.swing.JLabel();
         MONTODECUOTA = new javax.swing.JTextField();
         btngenerarprestamo = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnsalir = new javax.swing.JButton();
         BtnImprimir = new javax.swing.JButton();
 
         setClosable(true);
@@ -377,9 +383,9 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         txtmontomensual.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         txtmontomensual.setText("15000");
 
-        btnGenerarCuota.setBackground(new java.awt.Color(102, 255, 102));
+        btnGenerarCuota.setBackground(new java.awt.Color(255, 255, 255));
         btnGenerarCuota.setFont(new java.awt.Font("Leelawadee UI", 0, 11)); // NOI18N
-        btnGenerarCuota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/registro4.png"))); // NOI18N
+        btnGenerarCuota.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/generate2.png"))); // NOI18N
         btnGenerarCuota.setText("generar cuotas");
         btnGenerarCuota.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnGenerarCuota.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -389,8 +395,14 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(255, 204, 102));
-        jButton2.setText("Agregar Clausulas");
+        btnclausulas.setBackground(new java.awt.Color(255, 255, 255));
+        btnclausulas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/clausulas1.png"))); // NOI18N
+        btnclausulas.setText("Agregar Clausulas");
+        btnclausulas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnclausulasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -420,7 +432,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                     .addComponent(jLabel14))
                 .addGap(38, 38, 38)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnclausulas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGenerarCuota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -455,7 +467,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                                     .addComponent(txtmontomensual)))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnclausulas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -465,20 +477,15 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "BUSCAR CLIENTE", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Leelawadee UI", 1, 11))); // NOI18N
 
-        txtdnibuscar.setFont(new java.awt.Font("Lucida Bright", 1, 16)); // NOI18N
-        txtdnibuscar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 255), 1, true));
-
-        btnBuscarCliente.setBackground(new java.awt.Color(0, 102, 204));
-        btnBuscarCliente.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        btnBuscarCliente.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscarCliente.setText("Buscar Cliente");
-        btnBuscarCliente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarClienteActionPerformed(evt);
+        txtfiltro.setFont(new java.awt.Font("Lucida Bright", 1, 16)); // NOI18N
+        txtfiltro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 255), 1, true));
+        txtfiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtfiltroKeyTyped(evt);
             }
         });
 
+        tablaclientes.setBackground(new java.awt.Color(204, 204, 255));
         tablaclientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -502,9 +509,8 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnBuscarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
-                    .addComponent(txtdnibuscar))
+                    .addComponent(txtfiltro))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -513,9 +519,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtdnibuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -553,7 +557,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
 
         btngenerarprestamo.setBackground(new java.awt.Color(204, 204, 255));
         btngenerarprestamo.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        btngenerarprestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/checkin1.png"))); // NOI18N
+        btngenerarprestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/contrato1.png"))); // NOI18N
         btngenerarprestamo.setText("REGISTRAR PRESTAMO");
         btngenerarprestamo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btngenerarprestamo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -565,12 +569,17 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 255));
-        jButton1.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cancelar4.png"))); // NOI18N
-        jButton1.setText("CANCELAR");
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnsalir.setBackground(new java.awt.Color(204, 204, 255));
+        btnsalir.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
+        btnsalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cancelar4.png"))); // NOI18N
+        btnsalir.setText("CANCELAR");
+        btnsalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnsalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnsalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsalirActionPerformed(evt);
+            }
+        });
 
         BtnImprimir.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         BtnImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/imprimir3.png"))); // NOI18N
@@ -594,7 +603,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(BtnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -622,7 +631,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btngenerarprestamo, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(btnsalir, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addGap(21, 21, 21))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
@@ -673,10 +682,6 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtdniActionPerformed
 
-    private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
-        buscarcliente();
-    }//GEN-LAST:event_btnBuscarClienteActionPerformed
-
     private void btnGenerarCuotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarCuotaActionPerformed
         limpiartablacuota();
         generarcuota();
@@ -707,6 +712,8 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
             parametro.put("cantidadcuotas", cantidadcuotas);
             parametro.put("formapago", formapago);
             parametro.put("montocuota", MONTODECUOTA.getText());
+            parametro.put("clausula", cla.capturartexto);
+            
             
             parametro.put("fondoimagen", "C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Iconos\\Prestamin2.png");
             JasperPrint pirnt = JasperFillManager.fillReport(reporte, parametro, new JRBeanCollectionDataSource(Listaimpresion));
@@ -731,6 +738,34 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         
 
     }//GEN-LAST:event_tablaclientesMouseClicked
+
+    private void txtfiltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfiltroKeyTyped
+        txtfiltro.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(final KeyEvent e) {
+                // Llamamos al método encargado de realizar el filtro
+                filtro();
+            }
+        });
+        // Inicializamos el objeto trsfiltro de la clase TableRowSorter con
+        // el modelo de la tabla, que para nuestro caso es tabladatos
+        trs = new TableRowSorter(modelo);
+        // Añadimos al Jtable el filtro trsfiltro
+        tablaclientes.setRowSorter(trs);
+
+    }//GEN-LAST:event_txtfiltroKeyTyped
+
+    private void btnclausulasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclausulasActionPerformed
+      
+      cla.setVisible(true);
+      cla.setLocationRelativeTo(null);
+     
+     
+    }//GEN-LAST:event_btnclausulasActionPerformed
+
+    private void btnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnsalirActionPerformed
 
     //public String calcularfecha(){
     //}
@@ -867,13 +902,14 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
                 fechaing = dia + "-" + mes + "-" + year;
             }
         }
+        listar();
         
     }
     
     void buscarcliente() {
-        String dnicli = txtdnibuscar.getText();
+        String dnicli = txtfiltro.getText();
         
-        if (txtdnibuscar.getText().equals("")) {
+        if (txtfiltro.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Udted debe ingresar el dni del cliente");
         } else {
             Cliente cli = clidao.BuscarCliente(dnicli);
@@ -966,7 +1002,7 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         prestamo.setCantidadcuotas(cantidadcuotas);
         prestamo.setTotalpagar(totalpagar);
         
-        String dnicli = txtdnibuscar.getText();
+        String dnicli = txtfiltro.getText();
         Cliente cli = clidao.BuscarCliente(dnicli);
         int idcliente = Integer.parseInt(txtnrocliente.getText());
         prestamo.setId_cliente(idcliente);
@@ -1068,6 +1104,11 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
         }
         tablaclientes.setModel(modelo);
     }
+    
+     public void filtro() {
+         int columnanombre = 1;
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + txtfiltro.getText(), columnanombre));
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1077,13 +1118,12 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> JCBOXCANTCUO;
     private javax.swing.JLabel LabelNroPrestamo;
     private javax.swing.JTextField MONTODECUOTA;
-    private javax.swing.JButton btnBuscarCliente;
     private javax.swing.JButton btnGenerarCuota;
+    private javax.swing.JButton btnclausulas;
     private javax.swing.JButton btngenerarprestamo;
+    private javax.swing.JButton btnsalir;
     private javax.swing.JLabel fechaactual;
     private com.toedter.calendar.JDateChooser fechapago;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1114,8 +1154,8 @@ public class NuevoPrestamo extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtapellido;
     private javax.swing.JTextField txtdireccion;
     private javax.swing.JTextField txtdni;
-    private javax.swing.JTextField txtdnibuscar;
     private javax.swing.JTextField txtemail;
+    private javax.swing.JTextField txtfiltro;
     private javax.swing.JTextField txtmonto;
     private javax.swing.JTextField txtmontomensual;
     private javax.swing.JTextField txtnombre;

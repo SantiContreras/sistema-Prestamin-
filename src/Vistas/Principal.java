@@ -49,7 +49,6 @@ public class Principal extends javax.swing.JFrame {
         ModificarPrestamo = new javax.swing.JMenuItem();
         NewPrestamo = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        RegistrarCobro = new javax.swing.JMenuItem();
         RegistrarCobro2 = new javax.swing.JMenuItem();
         EstadoGanancia = new javax.swing.JMenu();
         Ganancia = new javax.swing.JMenuItem();
@@ -100,6 +99,7 @@ public class Principal extends javax.swing.JFrame {
         });
         NuevoPrestamo.add(ModificarPrestamo);
 
+        NewPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/add4.png"))); // NOI18N
         NewPrestamo.setText("Nuevo Prestamo");
         NewPrestamo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,15 +122,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        RegistrarCobro.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        RegistrarCobro.setText("Registrar cobro");
-        RegistrarCobro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RegistrarCobroActionPerformed(evt);
-            }
-        });
-        jMenu2.add(RegistrarCobro);
-
+        RegistrarCobro2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/registro5.png"))); // NOI18N
         RegistrarCobro2.setText("Registrar Cobro 2");
         RegistrarCobro2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,6 +198,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        HistorialDePago.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/historialPago1.png"))); // NOI18N
         HistorialDePago.setText("HistorialDePago");
         HistorialDePago.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,11 +242,6 @@ public class Principal extends javax.swing.JFrame {
         NuevoPrestamo np = new NuevoPrestamo();
         CentrarVentana(np);
     }//GEN-LAST:event_NewPrestamoActionPerformed
-
-    private void RegistrarCobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegistrarCobroActionPerformed
-        RegistrarPago regpago = new RegistrarPago();
-        CentrarVentana(regpago);
-    }//GEN-LAST:event_RegistrarCobroActionPerformed
 
     private void HistoriaPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HistoriaPagoActionPerformed
 
@@ -332,7 +320,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem ModificarPrestamo;
     private javax.swing.JMenuItem NewPrestamo;
     private javax.swing.JMenu NuevoPrestamo;
-    private javax.swing.JMenuItem RegistrarCobro;
     private javax.swing.JMenuItem RegistrarCobro2;
     private javax.swing.JDesktopPane VentanaPrincipal;
     private javax.swing.JMenu jMenu2;

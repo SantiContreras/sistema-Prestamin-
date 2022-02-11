@@ -41,6 +41,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="NewPrestamo">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Iconos/add4.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Nuevo Prestamo"/>
               </Properties>
               <Events>
@@ -68,19 +71,11 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu2ActionPerformed"/>
           </Events>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="RegistrarCobro">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Leelawadee UI" size="12" style="0"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Registrar cobro"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RegistrarCobroActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="RegistrarCobro2">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Iconos/registro5.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Registrar Cobro 2"/>
               </Properties>
               <Events>
@@ -198,6 +193,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="HistorialDePago">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Iconos/historialPago1.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="HistorialDePago"/>
               </Properties>
               <Events>

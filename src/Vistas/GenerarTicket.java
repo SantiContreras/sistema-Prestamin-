@@ -417,6 +417,7 @@ public class GenerarTicket extends javax.swing.JInternalFrame {
                     cli_ticket.setFechalimitepago(fechalimitepago);
                     cli_ticket.setTotal(Double.toString(total));
                     
+                    
                     clientestick.add(cli_ticket);
 
                     Object[] ob = new Object[9];
