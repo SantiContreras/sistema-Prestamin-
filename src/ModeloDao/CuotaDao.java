@@ -5,8 +5,10 @@
 package ModeloDao;
 
 import Modelo.Cliente;
+import Modelo.ClienteTicket;
 import Modelo.Conexion;
 import Modelo.Cuota;
+import Modelo.Prestamo;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -51,7 +53,7 @@ public class CuotaDao {
 
     public List BuscarCuotas(int id) {
         List<Cuota> lista = new ArrayList<>();
-        String sql = "select c.id_cuota ,c.id_prestamo,c.montocuota ,c.fechapago,c.estado_cuota,c.numero_cuota    \n"
+        String sql = "select c.id_cuota ,c.id_prestamo,c.montocuota ,c.abonado,c.saldocuota,c.atraso,c.fechapago,c.estado_cuota,c.numero_cuota    \n"
                 + "from  cuota c , prestamo p \n"
                 + "where p.id_prestamo = c.id_prestamo and p.id_cliente=?;";
 
@@ -65,9 +67,12 @@ public class CuotaDao {
                 c.setIdcuota(rs.getInt(1));
                 c.setIdprestamo(rs.getInt(2));
                 c.setMonto(rs.getDouble(3));
-                c.setFechapago(rs.getDate(4));
-                c.setEstadocuota(rs.getString(5));
-                c.setNumero_cuota(rs.getInt(6));
+                c.setAbonado(rs.getDouble(4));
+                c.setSaldocuota(rs.getDouble(5));
+                c.setAtraso(rs.getDouble(6));
+                c.setFechapago(rs.getDate(7));
+                c.setEstadocuota(rs.getString(8));
+                c.setNumero_cuota(rs.getInt(9));
                 lista.add(c);
             }
 
@@ -78,8 +83,8 @@ public class CuotaDao {
 
     public double CalcularCuotaSemanal(int cantidad, double montoprestado) {
         double totalcuota = 0;
-        double interes = 0 ;
-       DecimalFormat df = new DecimalFormat("#0.00");
+        double interes = 0;
+        DecimalFormat df = new DecimalFormat("#0.00");
 
         switch (cantidad) {
 
@@ -155,8 +160,8 @@ public class CuotaDao {
 
         }
 
-        totalcuota = (interes * montoprestado ) / cantidad ;
-        totalcuota = Math.round( totalcuota * 100d)/100;
+        totalcuota = (interes * montoprestado) / cantidad;
+        totalcuota = Math.round(totalcuota * 100d) / 100;
 
         return totalcuota;
 
@@ -242,10 +247,10 @@ public class CuotaDao {
         return interes;
 
     }
-    
+
     public double asignarinteresesmenuales(int cantidad) {
         double interes = 0;
-        
+
         switch (cantidad) {
 
             case 2:
@@ -281,16 +286,16 @@ public class CuotaDao {
             case 12:
                 interes = 2.80;
                 break;
-           
-         }
-        
+
+        }
+
         return interes;
     }
-    
-    public double CalcularCuotaMensual(int cantidad , double montoprestado) {
-          double interes = 0;
-          double total = 0 ;
-         switch (cantidad) {
+
+    public double CalcularCuotaMensual(int cantidad, double montoprestado) {
+        double interes = 0;
+        double total = 0;
+        switch (cantidad) {
 
             case 2:
                 interes = 1.30;
@@ -325,45 +330,148 @@ public class CuotaDao {
             case 12:
                 interes = 2.80;
                 break;
-           
-         }
-         
-         total = (interes * montoprestado) / cantidad;
-         
-         return total;
+
+        }
+
+        total = (interes * montoprestado) / cantidad;
+
+        return total;
     }
-    
-    public int ActualizarCuotar( int id) {
-       String sql = "update cuota set estado_cuota = 'PAGADA' where id_cuota=?";
-       
-          try {
+
+    public int ActualizarCuotar(String estado, double abonado, double cuosaldo, double atraso, int id) {
+        String sql = "update cuota set estado_cuota =? ,abonado=? , saldocuota=?, atraso=? where id_cuota=?";
+
+        try {
             con = acceso.Conectar();
             ps = con.prepareStatement(sql);
-           
-            ps.setInt(1, id );
-          
-           
-            
-            
+
+            ps.setInt(5, id);
+            ps.setString(1, estado);
+            ps.setDouble(2, abonado);
+            ps.setDouble(3, cuosaldo);
+            ps.setDouble(4, atraso);
+
             r = ps.executeUpdate();
         } catch (Exception e) {
         }
-        
+
         return r;
     }
-    
-    public double calcularsalgomoroso(double monto ){
-        double saldo=0;
-        
+
+    public double calcularsalgomoroso(double monto) {
+        double saldo = 0;
+
         return saldo;
     }
-    
-    public double calculartotalpagar(double montocuota , double saldomoroso) {
+
+    public double calculartotalpagar(double montocuota, double saldomoroso) {
         double total = 0;
-        
+
         total = montocuota + saldomoroso;
-        
+
         return total;
+    }
+
+    public List BuscarCuotasPorRangos(String desde, String hasta) {
+        List<ClienteTicket> lista = new ArrayList<>();
+        String sql = "select  DISTINCT c.nombre , c.apellido ,c.direccion,c.telefono, s.montoacreedor , s.montodeudor , s.montomoroso , cu.fechapago ,cu.montocuota ,cu.numero_cuota,p.totalpagar from cuota cu , prestamo p , cliente c , saldocliente s where cu.id_prestamo = p.id_prestamo and p.id_cliente = c.id_cliente and c.id_cliente=s.id_cliente and cu.fechapago>=?"
+                + " and cu.fechapago <=? and cu.estado_cuota=\"PENDIENTE\"";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, desde);
+            ps.setString(2, hasta);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                ClienteTicket cliticket = new ClienteTicket();
+                cliticket.setNombre(rs.getString(1));
+                cliticket.setApellido(rs.getString(2));
+                cliticket.setDireccion(rs.getString(3));
+                cliticket.setTelefono(rs.getString(4));
+                cliticket.setSaldopagado(rs.getString(5));
+                cliticket.setSaldodebe(rs.getString(6));
+                cliticket.setSaldomoroso(rs.getString(7));
+                cliticket.setFechalimitepago(rs.getString(8));
+                cliticket.setMontocuota(rs.getString(9));
+                cliticket.setNrocuota(rs.getString(10));
+                cliticket.setImporteprestado(rs.getString(11));
+                lista.add(cliticket);
+
+            }
+        } catch (Exception e) {
+        }
+
+        return lista;
+    }
+
+    public int ActualizarCuotaMalCargarga(double abonado, double saldocuota, String estado, int id) {
+
+        String sql = "update cuota set abonado=? , saldocuota=?,estado_cuota =?  where id_cuota=?";
+
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setDouble(1, abonado);
+            ps.setDouble(2, saldocuota);
+            ps.setString(3, estado);
+
+            ps.setInt(4, id);
+
+            r = ps.executeUpdate();
+        } catch (Exception e) {
+        }
+
+        return r;
+    }
+
+    public int CantidadCuotas(int id) {
+        String sql = "SELECT MAX(c.numero_cuota) from cuota c where c.id_prestamo=?";
+        int cantidad = 0;
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            cantidad = (rs.getInt(1));
+
+        } catch (Exception e) {
+        }
+
+        return cantidad;
+
+    }
+
+    public List BuscarCuotasAtradas(String desde) {
+        List<ClienteTicket> lista = new ArrayList<>();
+        String sql = "select  DISTINCT c.nombre , c.apellido ,c.direccion,c.telefono, s.montoacreedor , s.montodeudor , s.montomoroso , cu.fechapago ,cu.montocuota ,cu.numero_cuota,p.totalpagar from cuota cu , prestamo p , cliente c , saldocliente s where cu.id_prestamo = p.id_prestamo and p.id_cliente = c.id_cliente and c.id_cliente=s.id_cliente and cu.fechapago<=? and cu.estado_cuota=\"VENCIDA\" and s.montomoroso>0";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, desde);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                ClienteTicket cliticket = new ClienteTicket();
+                cliticket.setNombre(rs.getString(1));
+                cliticket.setApellido(rs.getString(2));
+                cliticket.setDireccion(rs.getString(3));
+                cliticket.setTelefono(rs.getString(4));
+                cliticket.setSaldopagado(rs.getString(5));
+                cliticket.setSaldodebe(rs.getString(6));
+                cliticket.setSaldomoroso(rs.getString(7));
+                cliticket.setFechalimitepago(rs.getString(8));
+                cliticket.setMontocuota(rs.getString(9));
+                cliticket.setNrocuota(rs.getString(10));
+                cliticket.setImporteprestado(rs.getString(11));
+                lista.add(cliticket);
+
+            }
+        } catch (Exception e) {
+        }
+
+        return lista;
     }
 
 }

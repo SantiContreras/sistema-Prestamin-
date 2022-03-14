@@ -17,6 +17,7 @@ import configuracion.ColorearFilas;
 import configuracion.ColorearHeader;
 import configuracion.Fecha;
 import configuracion.TablaRender;
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
@@ -62,12 +63,19 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
     CuotaDao cuodao = new CuotaDao();
     SaldoDao saldodao = new SaldoDao();
     PrestamoDao predao = new PrestamoDao();
+    Double montoabonado; // es el dinero real  que entrego al cobrador 
+    Double saldocuota; // diferencia de la cuota promedio y lo que el cliente pago 
+    Double atraso; // acucumulacion de atrasos de los clientes
     String direccion;
-    List<Cliente> listita = new ArrayList<>() ;
+    int idprestamo;
+    String nombre;
+    String apellido;
+    boolean verificarestado;
+    List<Cliente> listita = new ArrayList<>();
     List<Cliente> lista = clidao.Listar();
-    String columnas[] = {"nro prestamo", "id cuota", "monto", "fecha pago", "estado", "nrocuota", "accion"};
-    boolean ColumnasEditables[] = {false, false, false, false, false, false, true};
-    Class tipo[] = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
+    String columnas[] = {"nro prestamo", "id cuota", "monto", "abonado", "saldo cuota","atraso", "fecha pago", "estado", "nrocuota", "accion"};
+    boolean ColumnasEditables[] = {false, false, false, false,false, false, false, false, false, true};
+    Class tipo[] = new Class[]{java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
         java.lang.Object.class, java.lang.Object.class,
         java.lang.Boolean.class};
     DefaultTableModel modelo = new DefaultTableModel();
@@ -106,19 +114,20 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
 
         modelo2.setColumnIdentifiers(columnas);
         tablacuotas.setModel(modelo2);
+        
 
     }
 
     void listar() {
-        
+
         modelo = (DefaultTableModel) tablaclientes.getModel();
-        Object[] objeto = new Object[5];
+        Object[] objeto = new Object[3];
         for (int i = 0; i < lista.size(); i++) {
             objeto[0] = lista.get(i).getNombre();
             objeto[1] = lista.get(i).getApellido();
-            objeto[2] = lista.get(i).getDni();
-            objeto[3] = lista.get(i).getTelefono();
-            objeto[4] = lista.get(i).getId();
+            objeto[2] = lista.get(i).getId();
+            //objeto[3] = lista.get(i).getTelefono();
+            //objeto[4] = lista.get(i).getId();
             modelo.addRow(objeto);
 
         }
@@ -160,12 +169,15 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         txtfiltro = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         LabelFecha = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablacuotas = new ColorearCelda();
         checkSeleccioanrTodo = new javax.swing.JCheckBox();
+        ValorPagadoCliente = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        pagaratraso = new javax.swing.JButton();
+        Aviso = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -196,10 +208,13 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        atrasocliente = new javax.swing.JLabel();
+        totalabonado = new javax.swing.JLabel();
+        LeyendaSaldo = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         BtnImprimir = new javax.swing.JButton();
-        BtnSalir = new javax.swing.JButton();
         btnpagar = new javax.swing.JButton();
+        ModificarPago = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -235,7 +250,7 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "NOMBRE", "APELLIDO", "DNI", "TELEFONO", "ID"
+                "NOMBRE", "APELLIDO", "ID"
             }
         ));
         tablaclientes.setRowHeight(24);
@@ -258,8 +273,8 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(129, 129, 129)
                 .addComponent(printclintes)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -278,6 +293,7 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         jPanel3.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
 
         txtfiltro.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
+        txtfiltro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 255), 1, true));
         txtfiltro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtfiltroKeyTyped(evt);
@@ -290,9 +306,6 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         LabelFecha.setFont(new java.awt.Font("Lucida Console", 0, 18)); // NOI18N
         LabelFecha.setText("25/10/2021");
 
-        jLabel24.setFont(new java.awt.Font("Lucida Console", 0, 18)); // NOI18N
-        jLabel24.setText("FILTRAR");
-
         jComboBox1.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOMBRE", "APELLIDO", "DNI" }));
 
@@ -302,10 +315,8 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel24)
-                .addGap(18, 18, 18)
-                .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
@@ -323,16 +334,10 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jComboBox1)
-                        .addGap(3, 3, 3))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel24))))
-                .addGap(17, 17, 17))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1)
+                    .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("RESUMEN DE CUENTA"));
@@ -358,6 +363,25 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             }
         });
 
+        ValorPagadoCliente.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        ValorPagadoCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 153, 255)));
+        ValorPagadoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ValorPagadoClienteActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("Ingrese valor:");
+
+        pagaratraso.setText("Pagar atraso en ultima cuota");
+        pagaratraso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagaratrasoActionPerformed(evt);
+            }
+        });
+
+        Aviso.setText("jLabel18");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -365,16 +389,35 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(checkSeleccioanrTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16)
+                            .addComponent(ValorPagadoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(checkSeleccioanrTodo, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pagaratraso)
+                        .addGap(31, 31, 31)
+                        .addComponent(Aviso, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkSeleccioanrTodo)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel16)
+                        .addGap(18, 18, 18)
+                        .addComponent(ValorPagadoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkSeleccioanrTodo)
+                    .addComponent(pagaratraso)
+                    .addComponent(Aviso))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -416,34 +459,31 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(44, 44, 44)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(capitalpagar)
-                    .addComponent(cantidadcuotas)
-                    .addComponent(capitalprestado)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(nroprestamo)
-                        .addGap(78, 78, 78)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(44, 44, 44)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(capitalpagar)
+                            .addComponent(cantidadcuotas)
+                            .addComponent(capitalprestado)
+                            .addComponent(nroprestamo)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel8)
-                        .addGap(49, 49, 49)
-                        .addComponent(EstadoPrestamo)))
-                .addGap(0, 8, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(EstadoPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(nroprestamo))
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel8)
-                        .addComponent(EstadoPrestamo)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(nroprestamo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -456,6 +496,10 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(capitalpagar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(EstadoPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -503,14 +547,20 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         EstadoCuota.setText(" ");
 
         jLabel9.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        jLabel9.setText("Saldo moroso:");
+        jLabel9.setText("Atraso:");
 
         jLabel10.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
 
         jLabel11.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
-        jLabel11.setText("Total a pagar:");
+        jLabel11.setText("Abonado:   $");
 
         jLabel14.setFont(new java.awt.Font("Leelawadee UI", 1, 14)); // NOI18N
+
+        atrasocliente.setText("jLabel18");
+
+        totalabonado.setText("jLabel19");
+
+        LeyendaSaldo.setText("jLabel18");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -536,8 +586,8 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                             .addComponent(resumenpago_moncuo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(EstadoCuota, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(25, 25, 25)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(resumenpago_salgores)
                             .addComponent(jLabel3))
@@ -545,22 +595,33 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(resumenpago_saldodudor)
                             .addComponent(saldopagado)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel11))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel14))
-                            .addComponent(jLabel10)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                        .addComponent(nada)
+                                .addGap(3, 3, 3)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGap(101, 101, 101)
+                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                                .addGap(10, 10, 10)
+                                                .addComponent(jLabel14))
+                                            .addComponent(jLabel10)))
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(atrasocliente)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(LeyendaSaldo))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                                .addComponent(nada)
+                                .addGap(18, 18, 18)
+                                .addComponent(resumen_cuota, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(jLabel11)))
                         .addGap(18, 18, 18)
-                        .addComponent(resumen_cuota, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(totalabonado)))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -571,7 +632,10 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel12)
                         .addComponent(nada)
-                        .addComponent(EstadoCuota)))
+                        .addComponent(EstadoCuota))
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(totalabonado)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
@@ -590,12 +654,12 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                     .addComponent(jLabel17)
                     .addComponent(resumenpago_nomcli)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel10)
+                    .addComponent(atrasocliente)
+                    .addComponent(LeyendaSaldo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel14))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel14)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ACCIONES", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Leelawadee UI", 0, 11))); // NOI18N
@@ -610,15 +674,6 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             }
         });
 
-        BtnSalir.setFont(new java.awt.Font("Leelawadee UI", 0, 11)); // NOI18N
-        BtnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Cancelar1.png"))); // NOI18N
-        BtnSalir.setText("cancelar");
-        BtnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnSalirActionPerformed(evt);
-            }
-        });
-
         btnpagar.setFont(new java.awt.Font("Leelawadee UI", 0, 10)); // NOI18N
         btnpagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/cash1.png"))); // NOI18N
         btnpagar.setText("PAGAR");
@@ -628,16 +683,23 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
             }
         });
 
+        ModificarPago.setText("ANULA PAGO");
+        ModificarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ModificarPagoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(BtnSalir)
-                    .addComponent(BtnImprimir)
-                    .addComponent(btnpagar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(BtnImprimir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ModificarPago, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnpagar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -646,31 +708,34 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(BtnImprimir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BtnSalir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(btnpagar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(ModificarPago, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnpagar, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap(231, Short.MAX_VALUE))
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -683,7 +748,8 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -702,30 +768,56 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         //int seleccionar = tablaclientes.rowAtPoint(evt.getPoint());
         limpiartablacuota();
         int seleccionar = tablaclientes.getSelectedRow();
-        id = Integer.parseInt((tablaclientes.getValueAt(seleccionar, 4).toString()));
-        direccion = (tablaclientes.getValueAt(seleccionar, 3).toString());
-        dni = (String) tablaclientes.getValueAt(seleccionar, 2);
+        id = Integer.parseInt((tablaclientes.getValueAt(seleccionar, 2).toString()));
+        //direccion = (tablaclientes.getValueAt(seleccionar, 3).toString());
+        //dni = (String) tablaclientes.getValueAt(seleccionar, 2);
         modelo2 = (DefaultTableModel) tablacuotas.getModel();
+        Cliente cliente = clidao.BuscarClientePorId( id);
+        nombre = cliente.getNombre();
+        apellido = cliente.getApellido();
         List<Cuota> lista = cuodao.BuscarCuotas(id);
-        Object[] objeto = new Object[7];
+       
+      
+        if (lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El cliente no posee prestamos vigente");
+        }
+        Object[] objeto = new Object[10];
 
         for (int i = 0; i < lista.size(); i++) {
+            
+            
+                    
             objeto[0] = lista.get(i).getIdprestamo();
             objeto[1] = lista.get(i).getIdcuota();
             objeto[2] = lista.get(i).getMonto();
-            objeto[3] = lista.get(i).getFechapago();
+            objeto[3] = lista.get(i).getAbonado();
+            objeto[4] = lista.get(i).getSaldocuota();
+            objeto[5] = lista.get(i).getAtraso();
+            objeto[6] = lista.get(i).getFechapago();
 
-            objeto[4] = lista.get(i).getEstadocuota();
-            objeto[5] = lista.get(i).getNumero_cuota();
-            objeto[6] = checkSeleccioanrTodo.isSelected();
-
+            objeto[7] = lista.get(i).getEstadocuota();
+            objeto[8] = lista.get(i).getNumero_cuota();
+            objeto[9] = checkSeleccioanrTodo.isSelected(); // paso un valor voleano para la sellecion
+            if(objeto[7].equals("VENCIDA")) {
+              verificarestado = true;
+            } else{
+                verificarestado = false;
+            }
+            
             modelo2.addRow(objeto);
 
         }
+        
+        if (verificarestado == true) {
+         btnpagar.setEnabled(false);
+        }else{
+           btnpagar.setEnabled(true);
+        }
 
         tablacuotas.setModel(modelo2);
-        //tablacuotas.getColumnModel().getColumn(6).setCellEditor(defaultcelleditor);
-        //tablacuotas.setDefaultRenderer(tablacuotas.getColumnClass(0), renderer);
+        //obtenemos el valor de la cuota promedio que debe pagar el cliente
+        ValorPagadoCliente.setText(tablacuotas.getValueAt(1, 2).toString());
+
         obtenerinfoprestamo();
 
 
@@ -760,49 +852,84 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
 
     private void btnpagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnpagarActionPerformed
         String Reportes = "";
+        int maximocuota=0;
         JTextArea area = new JTextArea();
-        if (Seleccionados(6)) {
+        if (Seleccionados(9)) {
             for (int i = 0; i < tablacuotas.getRowCount(); i++) {
-                boolean sel = (boolean) tablacuotas.getValueAt(i, 6);
+                boolean sel = (boolean) tablacuotas.getValueAt(i, 9);
                 if (sel) {
                     Reportes += "Codigo prestamo :   " + tablacuotas.getValueAt(i, 0) + "      Monto Cuota : " + tablacuotas.getValueAt(i, 2)
-                            + "     Fecha pago : " + tablacuotas.getValueAt(i, 3) + "\n";
+                            + "     Fecha pago : " + tablacuotas.getValueAt(i, 6) + "\n";
                     //resumenpago_nropres.setText(Integer.toString((int) tablacuotas.getValueAt(i, 0)));
-                    EstadoCuota.setText("PAGADO");
+                    
                     resumenpago_moncuo.setText(Double.toString((double) tablacuotas.getValueAt(i, 2)));
                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ");
-
-                    var fecha = dateFormat.format(tablacuotas.getValueAt(i, 3));
+                     int numerocuota = (int) tablacuotas.getValueAt(i, 8); // para comprar el numero de cuota
+                    var fecha = dateFormat.format(tablacuotas.getValueAt(i, 6));
                     resumenpago_fechapago.setText(fecha);
-                    resumen_cuota.setText(Integer.toString((int) tablacuotas.getValueAt(i, 5)));
-                    Cliente cli = clidao.BuscarCliente(dni);
-                    String nombre = cli.getNombre();
-                    String apellido = cli.getApellido();
+                    resumen_cuota.setText(Integer.toString((int) tablacuotas.getValueAt(i, 8)));
+                   
                     resumenpago_nomcli.setText(nombre + " " + apellido);
-                    
+
                     //buscamos los saldos
                     SaldoCliente saldocliente = saldodao.BuscarSaldo(id);
                     //double salgo_ac = saldodao.CalcularSalgoAcreedor((double) tablacuotas.getValueAt(i, 2));
                     //double capiprestado = Double.parseDouble(capitalprestado.getText());
+                    double pagadoporelcliente = Double.parseDouble(ValorPagadoCliente.getText());
+                    double sm = saldocliente.getSaldomoroso();
                     double sa = saldocliente.getSaldoacreedor();
-                    double saldo_ac = sa + (double) tablacuotas.getValueAt(i, 2);
-                    double saldo_deu = capital - saldo_ac;
-                    resumenpago_saldodudor.setText(Double.toString(saldo_deu));
+
+                    double montocu = (double) tablacuotas.getValueAt(i, 2);
+                    double saldo_ac = saldodao.CalcularSalgoAcreedor(sa, pagadoporelcliente);
+                    double saldo_debe = capital - saldo_ac;
+                    double morosidad = saldodao.CalcularAtraso(montocu, pagadoporelcliente, sm); //calcula si paga de mas o de menos el saldo moroso
+                    double saldo_m = morosidad;
+                    resumenpago_saldodudor.setText(Double.toString(saldo_debe));
                     saldopagado.setText(Double.toString(saldo_ac));
-                    saldodao.ActualizarSaldo( saldo_deu,saldo_ac,  id);
-                    idcuota =  (int) tablacuotas.getValueAt(i,1);
+                    saldodao.ActualizarSaldo(saldo_debe, saldo_ac, saldo_m, id);
+                    idcuota = (int) tablacuotas.getValueAt(i, 1);
+                    atrasocliente.setText(Double.toString(saldo_m));// trae el saldo atrasado acumulado
+                    totalabonado.setText(ValorPagadoCliente.getText());
+                    montoabonado = pagadoporelcliente;
+                    saldocuota = montocu - pagadoporelcliente;
+                    atraso = saldo_m;
+
+                    if (pagadoporelcliente < montocu && saldo_m > 0) {
+                        EstadoCuota.setText("ATRASADA");
+                    } else 
+                    if(saldo_m<=0){
+                        EstadoCuota.setText("PAGADA");
+                       
+                    }
+                    
+                    if(saldo_m<0) {
+                       LeyendaSaldo.setText("(A FAVOR DEL CLIENTE)");
+                        LeyendaSaldo.setBackground(Color.red);
+                    }
+                     
+                    //pregunto si es la ultima cuota del cliente y hago las actualizaciones
+                     maximocuota = (cuodao.CantidadCuotas(Integer.parseInt(nroprestamo.getText())));
+
+                    if (Integer.parseInt(cantidadcuotas.getText()) == numerocuota) {
+                        if (saldo_m > 0) {
+                            EstadoCuota.setText("VENCIDA");
+                            Aviso.setText("El cliente tiene atrasos,pagar con la funcion pagar atrasos");
+                        }
+                    }
 
                 }
             }
             area.setText(Reportes);
             JOptionPane.showMessageDialog(this, area);
-            cuodao.ActualizarCuotar(idcuota);
+            cuodao.ActualizarCuotar(EstadoCuota.getText(), montoabonado, saldocuota,atraso, idcuota);
             JOptionPane.showMessageDialog(this, " Se pago la cuota con exito!!");
 
         } else {
             JOptionPane.showMessageDialog(null, "Antes de obtener los datos, debe de seleccionar por lo menos a un checkbox",
                     "Mensaje", JOptionPane.WARNING_MESSAGE);
         }
+
+        FinalizacionPrestamo();
     }//GEN-LAST:event_btnpagarActionPerformed
 
     private void checkSeleccioanrTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSeleccioanrTodoActionPerformed
@@ -821,49 +948,159 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
 
     private void BtnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnImprimirActionPerformed
         try {
-            JasperReport reporte =  (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Reportes\\ResumenPago.jasper");
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Reportes\\ResumenPago.jasper");
             Map parametro = new HashMap();
             parametro.put("nombre", resumenpago_nomcli.getText());
             parametro.put("telefono", direccion);
-            parametro.put("montocuota",resumenpago_moncuo.getText());
+            parametro.put("montocuota", resumenpago_moncuo.getText());
             parametro.put("fechalimitepago", resumenpago_fechapago.getText());
             parametro.put("nrocuota", resumen_cuota.getText());
             parametro.put("montopagado", saldopagado.getText());
             parametro.put("montodebe", resumenpago_saldodudor.getText());
             parametro.put("EstadoCuota", EstadoCuota.getText());
-            parametro.put("EstadoCuenta",EstadoPrestamo.getText());
-            
-            
-            
+            parametro.put("EstadoCuenta", EstadoPrestamo.getText());
+            parametro.put("abonado", totalabonado.getText());
+            parametro.put("atraso", atrasocliente.getText());
+
             parametro.put("fondoimagen", "C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Iconos\\Prestamin2.png");
-            JasperPrint pirnt = JasperFillManager.fillReport(reporte, parametro,new JREmptyDataSource());
-            JasperViewer.viewReport(pirnt,false); 
+            JasperPrint pirnt = JasperFillManager.fillReport(reporte, parametro, new JREmptyDataSource());
+            JasperViewer.viewReport(pirnt, false);
         } catch (JRException ex) {
             Logger.getLogger(RegistrarCobro2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_BtnImprimirActionPerformed
 
     private void printclintesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printclintesActionPerformed
-         try {
-        JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Reportes\\ReporteClientes.jasper");
-        Map parametro = new HashMap();
-        //Map parametro2 = new HashMap();
-        parametro.put("nroprestamo", nroprestamo.getText());
-        parametro.put("capitalprestado", capitalprestado.getText());
-        parametro.put("saldodebe", resumenpago_saldodudor.getText());
-        parametro.put("fondoimagen", "C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Iconos\\Prestamin2.png");
-        //parametro2.put("capital prestado", capitalprestado.getText());
-        JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, new JRBeanCollectionDataSource(lista));
-        JasperViewer.viewReport(jprint, false);
-    } catch (JRException ex) {
-       // Logger.getLogger(ConsultasClientes.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile("C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Reportes\\ReporteClientes.jasper");
+            Map parametro = new HashMap();
+            //Map parametro2 = new HashMap();
+            parametro.put("nroprestamo", nroprestamo.getText());
+            parametro.put("capitalprestado", capitalprestado.getText());
+            parametro.put("saldodebe", resumenpago_saldodudor.getText());
+            parametro.put("fondoimagen", "C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Iconos\\Prestamin2.png");
+            //parametro2.put("capital prestado", capitalprestado.getText());
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, new JRBeanCollectionDataSource(lista));
+            JasperViewer.viewReport(jprint, false);
+        } catch (JRException ex) {
+            // Logger.getLogger(ConsultasClientes.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_printclintesActionPerformed
 
-    private void BtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_BtnSalirActionPerformed
+    private void ValorPagadoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValorPagadoClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ValorPagadoClienteActionPerformed
+
+    private void ModificarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarPagoActionPerformed
+        if (Seleccionados(9)) {
+            for (int i = 0; i < tablacuotas.getRowCount(); i++) {
+                boolean sel = (boolean) tablacuotas.getValueAt(i, 9);
+                if (sel) {
+
+                    SaldoCliente saldocliente = saldodao.BuscarSaldo(id);
+
+                    double pagadoporelcliente = Double.parseDouble(ValorPagadoCliente.getText());
+                    double sm = saldocliente.getSaldomoroso();
+                    double sa = saldocliente.getSaldoacreedor();
+                    double sd = saldocliente.getSalgodeudor();
+
+                    double abonado = (double) tablacuotas.getValueAt(i, 3);
+                    double saldocuota = (double) tablacuotas.getValueAt(i, 4);
+                    double montocuota = (double) tablacuotas.getValueAt(i, 2);
+                    double nuevo_sm = 0;
+                    int idcuota = (int) tablacuotas.getValueAt(i, 1);
+
+                    if (sm > 0) {
+                        nuevo_sm = sm - saldocuota;
+                    } else if (sm <= 0) {
+                        nuevo_sm = sm - saldocuota;
+                    }
+                    double nuevo_sa = sa - abonado;
+                    double nuevo_sb = sd + abonado;
+
+                    saldodao.ActualizarSaldo(nuevo_sb, nuevo_sa, nuevo_sm, id);
+
+                    String estado = "PENDIENTE";
+                    cuodao.ActualizarCuotaMalCargarga(0, 0, estado, idcuota);
+
+                    saldopagado.setText(Double.toString(nuevo_sa));
+                    atrasocliente.setText(Double.toString(nuevo_sm));
+                    resumenpago_saldodudor.setText(Double.toString(nuevo_sb));
+
+                }
+            }
+            //area.setText(Reportes);
+            //JOptionPane.showMessageDialog(this, area);
+
+            JOptionPane.showMessageDialog(this, " Se modifico la cuota EXITOSAMENTE!!");
+
+        }
+    }//GEN-LAST:event_ModificarPagoActionPerformed
+
+    private void pagaratrasoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagaratrasoActionPerformed
+        if (Seleccionados(9)) {
+            for (int i = 0; i < tablacuotas.getRowCount(); i++) {
+                boolean sel = (boolean) tablacuotas.getValueAt(i, 9);
+                if (sel) {
+                    //Reportes += "Codigo prestamo :   " + tablacuotas.getValueAt(i, 0) + "      Monto Cuota : " + tablacuotas.getValueAt(i, 2)
+                    //        + "     Fecha pago : " + tablacuotas.getValueAt(i, 5) + "\n";
+                    //resumenpago_nropres.setText(Integer.toString((int) tablacuotas.getValueAt(i, 0)));
+                    
+                    resumenpago_moncuo.setText(Double.toString((double) tablacuotas.getValueAt(i, 2)));
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ");
+                     int numerocuota = (int) tablacuotas.getValueAt(i, 8); // para comprar el numero de cuota
+                    var fecha = dateFormat.format(tablacuotas.getValueAt(i, 5));
+                    resumenpago_fechapago.setText(fecha);
+                    resumen_cuota.setText(Integer.toString((int) tablacuotas.getValueAt(i, 8)));
+                    
+                    resumenpago_nomcli.setText(nombre + " " + apellido);
+
+                    //buscamos los saldos
+                    SaldoCliente saldocliente = saldodao.BuscarSaldo(id);
+                    //double salgo_ac = saldodao.CalcularSalgoAcreedor((double) tablacuotas.getValueAt(i, 2));
+                    //double capiprestado = Double.parseDouble(capitalprestado.getText());
+                    double pagadoporelcliente = Double.parseDouble(ValorPagadoCliente.getText());
+                    double sm = saldocliente.getSaldomoroso();
+                    double sa = saldocliente.getSaldoacreedor();
+
+                    //double montocu = (double) tablacuotas.getValueAt(i, 2);
+                    double saldo_ac = saldodao.CalcularSalgoAcreedor(sa, pagadoporelcliente);
+                    double saldo_debe = capital - saldo_ac;
+                    //double morosidad = saldodao.CalcularAtraso(montocu, pagadoporelcliente, sm); //calcula si paga de mas o de menos el saldo moroso
+                    double saldo_m = sm - pagadoporelcliente;
+                    resumenpago_saldodudor.setText(Double.toString(saldo_debe));
+                    saldopagado.setText(Double.toString(saldo_ac));
+                    saldodao.ActualizarSaldo(saldo_debe, saldo_ac, saldo_m, id);
+                    idcuota = (int) tablacuotas.getValueAt(i, 1);
+                    atrasocliente.setText(Double.toString(saldo_m));// trae el saldo atrasado acumulado
+                    totalabonado.setText(ValorPagadoCliente.getText());
+                    montoabonado = pagadoporelcliente;
+                    saldocuota = sm - pagadoporelcliente;
+                    atraso = saldocuota;
+
+                  if(saldo_m > 0) {
+                      EstadoCuota.setText("VENCIDA");
+                  }
+                  
+                  if(saldo_m<=0){
+                      EstadoCuota.setText("PAGADA");
+                  }
+                     
+                    //pregunto si es la ultima cuota del cliente y hago las actualizaciones
+                     //maximocuota = (cuodao.CantidadCuotas(Integer.parseInt(nroprestamo.getText())));
+
+                  
+
+                }
+            }
+            //area.setText(Reportes);
+            //JOptionPane.showMessageDialog(this, area);
+            cuodao.ActualizarCuotar(EstadoCuota.getText(), montoabonado, saldocuota,atraso, idcuota);
+            JOptionPane.showMessageDialog(this, " Se Pago atraso, vuelva a dar click en el cliente para actualizar!!");
+            FinalizacionPrestamo();
+        }
+    }//GEN-LAST:event_pagaratrasoActionPerformed
 
     private boolean Seleccionados(int pos) {
         int contador = 0;
@@ -901,18 +1138,36 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
         EstadoPrestamo.setText(prestamo.getEstado());
         capital = prestamo.getTotalpagar();
     }
-    
-    void ActualizarCuotaPago() {
-        
+
+    void FinalizacionPrestamo() {
+        SaldoCliente saldocli = new SaldoCliente();
+        saldocli = saldodao.BuscarSaldo(id);
+
+        double saldodebe = saldocli.getSalgodeudor();
+        double saldomoroso = saldocli.getSaldomoroso();
+
+        if (saldodebe <= 0 && saldomoroso <= 0) {
+            predao.ActualizarEstadoPrestamo(id);
+            EstadoPrestamo.setText("CANCELADO");
+            idprestamo = Integer.parseInt(nroprestamo.getText());
+            predao.EliminarPrestamo(idprestamo);
+            JOptionPane.showMessageDialog(this, "El cliente ha finalizado el pago del prestamo");
+            predao.ActualizarDespuesDeEliminacionAutomatica();
+        }
+
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Aviso;
     private javax.swing.JButton BtnImprimir;
-    private javax.swing.JButton BtnSalir;
     private javax.swing.JLabel EstadoCuota;
     private javax.swing.JLabel EstadoPrestamo;
     private javax.swing.JLabel LabelFecha;
+    private javax.swing.JLabel LeyendaSaldo;
+    private javax.swing.JButton ModificarPago;
+    private javax.swing.JTextField ValorPagadoCliente;
+    private javax.swing.JLabel atrasocliente;
     private javax.swing.JButton btnpagar;
     private javax.swing.JLabel cantidadcuotas;
     private javax.swing.JLabel capitalpagar;
@@ -926,9 +1181,9 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -947,6 +1202,7 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel nada;
     private javax.swing.JLabel nroprestamo;
+    private javax.swing.JButton pagaratraso;
     private javax.swing.JButton printclintes;
     private javax.swing.JLabel resumen_cuota;
     private javax.swing.JLabel resumenpago_fechapago;
@@ -957,6 +1213,7 @@ public class RegistrarCobro2 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel saldopagado;
     private javax.swing.JTable tablaclientes;
     private javax.swing.JTable tablacuotas;
+    private javax.swing.JLabel totalabonado;
     private javax.swing.JTextField txtfiltro;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@
  */
 package configuracion;
 
+import java.awt.Color;
 import static java.awt.Color.green;
 import static java.awt.Color.red;
 import java.awt.Component;
@@ -29,6 +30,19 @@ public class ColorearCelda extends JTable {
          component.setBackground(green);
          
          }
+         
+         if(this.getValueAt(row, Col).toString().equals("ATRASADA")){
+         
+         component.setBackground(Color.yellow);
+         
+         }
+         
+          if(this.getValueAt(row, Col).toString().equals("VENCIDA")){
+         
+         component.setBackground(Color.darkGray);
+         
+         }
+        
          return component;
     }
 }

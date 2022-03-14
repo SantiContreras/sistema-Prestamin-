@@ -11,6 +11,9 @@ public class Cuota {
     int idcuota;
     int idprestamo;
     double monto;
+    double abonado;
+    double saldocuota;
+    double atraso;
     Date fechapago;
     String estadocuota;
     int numero_cuota;
@@ -18,13 +21,41 @@ public class Cuota {
     public Cuota() {
     }
 
-    public Cuota(int idcuota, int idprestamo, double monto, Date fechapago, String estadocuota, int numero_cuota) {
+    public Cuota(int idcuota, int idprestamo, double monto, Date fechapago, String estadocuota, int numero_cuota, double abonado,double saldocuota,double atraso) {
         this.idcuota = idcuota;
         this.idprestamo = idprestamo;
         this.monto = monto;
         this.fechapago = fechapago;
         this.estadocuota = estadocuota;
         this.numero_cuota = numero_cuota;
+        this.abonado = abonado;
+        this.saldocuota=saldocuota;
+        this.atraso = atraso;
+    }
+
+    public double getSaldocuota() {
+        return saldocuota;
+    }
+
+    public double getAtraso() {
+        return atraso;
+    }
+
+    public void setAtraso(double atraso) {
+        this.atraso = atraso;
+    }
+    
+
+    public void setSaldocuota(double saldocuota) {
+        this.saldocuota = saldocuota;
+    }
+
+    public double getAbonado() {
+        return abonado;
+    }
+
+    public void setAbonado(double abonado) {
+        this.abonado = abonado;
     }
 
     public int getIdcuota() {

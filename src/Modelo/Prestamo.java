@@ -16,6 +16,9 @@ public class Prestamo {
     int id_cliente;
     Date fecha_inicio;
     double totalpagar;
+   
+
+  
     double montoprestado;
     double intereses;
     int cantidadcuotas;
@@ -27,7 +30,7 @@ public class Prestamo {
     public Prestamo() {
     }
 
-    public Prestamo(int id_prestamo, int id_cliente, Date fecha_inicio, double totalpagar, double montoprestado, double intereses, int cantidadcuotas, String estado , String formapago) {
+    public Prestamo(int id_prestamo, int id_cliente, Date fecha_inicio, double totalpagar, double montoprestado, double intereses, int cantidadcuotas, String estado , String formapago ) {
         this.id_prestamo = id_prestamo;
         this.id_cliente = id_cliente;
         this.fecha_inicio = fecha_inicio;
@@ -37,6 +40,7 @@ public class Prestamo {
         this.cantidadcuotas = cantidadcuotas;
         this.estado = estado;
         this.formapago = formapago;
+        
     }
 
     public int getId_prestamo() {
@@ -110,6 +114,8 @@ public class Prestamo {
     public void setFormapago(String formapago) {
         this.formapago = formapago;
     }
+    
+  
     
     
 }

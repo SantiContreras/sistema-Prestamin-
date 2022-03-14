@@ -46,7 +46,6 @@ public class Principal extends javax.swing.JFrame {
         };
         jMenuBar1 = new javax.swing.JMenuBar();
         NuevoPrestamo = new javax.swing.JMenu();
-        ModificarPrestamo = new javax.swing.JMenuItem();
         NewPrestamo = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         RegistrarCobro2 = new javax.swing.JMenuItem();
@@ -54,8 +53,6 @@ public class Principal extends javax.swing.JFrame {
         Ganancia = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         tickects = new javax.swing.JMenuItem();
         HistoriaPago = new javax.swing.JMenu();
@@ -89,15 +86,6 @@ public class Principal extends javax.swing.JFrame {
                 NuevoPrestamoActionPerformed(evt);
             }
         });
-
-        ModificarPrestamo.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        ModificarPrestamo.setText("Modificar prestamo");
-        ModificarPrestamo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ModificarPrestamoActionPerformed(evt);
-            }
-        });
-        NuevoPrestamo.add(ModificarPrestamo);
 
         NewPrestamo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/add4.png"))); // NOI18N
         NewPrestamo.setText("Nuevo Prestamo");
@@ -151,22 +139,19 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(EstadoGanancia);
 
-        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/Clientes1.png"))); // NOI18N
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/clientes2.png"))); // NOI18N
         jMenu4.setText("Clientes");
         jMenu4.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
         jMenu4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jMenu4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        jMenuItem3.setText("Nuevo cliente");
+        jMenuItem3.setText("ver clientes");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem3);
-
-        jMenuItem4.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        jMenuItem4.setText("Eliminar cliente");
-        jMenu4.add(jMenuItem4);
-
-        jMenuItem5.setFont(new java.awt.Font("Leelawadee UI", 0, 12)); // NOI18N
-        jMenuItem5.setText("Modificar cliente");
-        jMenu4.add(jMenuItem5);
 
         jMenuBar1.add(jMenu4);
 
@@ -230,13 +215,9 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NuevoPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NuevoPrestamoActionPerformed
-
+        NuevoPrestamo np = new NuevoPrestamo();
+        CentrarVentana(np);
     }//GEN-LAST:event_NuevoPrestamoActionPerformed
-
-    private void ModificarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModificarPrestamoActionPerformed
-        ModificarPrestamo mp = new ModificarPrestamo();
-        CentrarVentana(mp);
-    }//GEN-LAST:event_ModificarPrestamoActionPerformed
 
     private void NewPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPrestamoActionPerformed
         NuevoPrestamo np = new NuevoPrestamo();
@@ -267,9 +248,14 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_RegistrarCobro2ActionPerformed
 
     private void tickectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tickectsActionPerformed
-        GenerarTicket tickect = new  GenerarTicket();
+        GenerarTicket tickect = new GenerarTicket();
         CentrarVentana(tickect);
     }//GEN-LAST:event_tickectsActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        ClientesAccion cliaccion = new ClientesAccion();
+        CentrarVentana(cliaccion);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     void CentrarVentana(JInternalFrame frame) {
         VentanaPrincipal.add(frame);
@@ -317,7 +303,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem Ganancia;
     private javax.swing.JMenu HistoriaPago;
     private javax.swing.JMenuItem HistorialDePago;
-    private javax.swing.JMenuItem ModificarPrestamo;
     private javax.swing.JMenuItem NewPrestamo;
     private javax.swing.JMenu NuevoPrestamo;
     private javax.swing.JMenuItem RegistrarCobro2;
@@ -327,8 +312,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem tickects;
     // End of variables declaration//GEN-END:variables
 }

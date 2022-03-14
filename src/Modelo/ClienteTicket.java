@@ -13,6 +13,9 @@ public class ClienteTicket {
     String nombre;
     String apellido;
     String telefono;
+    String direccion;
+
+    
     String saldopagado;
     String saldodebe;
     String saldomoroso;
@@ -33,7 +36,7 @@ public class ClienteTicket {
     }
     
 
-    public ClienteTicket(String nombre, String apellido, String telefono, String saldopagado, String saldodebe, String saldomoroso, String total, String montocuota, String fechalimitepago, String nrocuota , String importeprestado) {
+    public ClienteTicket(String nombre, String apellido, String telefono, String saldopagado, String saldodebe, String saldomoroso, String total, String montocuota, String fechalimitepago, String nrocuota , String importeprestado,String direccion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -45,6 +48,7 @@ public class ClienteTicket {
         this.fechalimitepago = fechalimitepago;
         this.nrocuota = nrocuota;
         this.importeprestado = importeprestado;
+        this.direccion = direccion;
     }
 
     public String getNombre() {
@@ -125,6 +129,14 @@ public class ClienteTicket {
 
     public void setNrocuota(String nrocuota) {
         this.nrocuota = nrocuota;
+    }
+    
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
     
 }

@@ -14,6 +14,7 @@
 	<parameter name="estadocuenta" class="java.lang.String"/>
 	<parameter name="saldopagado" class="java.lang.String"/>
 	<parameter name="saldodebe" class="java.lang.String"/>
+	<parameter name="atraso" class="java.lang.String"/>
 	<field name="idprestamo" class="java.lang.Integer"/>
 	<field name="monto" class="java.lang.Double"/>
 	<field name="fechapago" class="java.util.Date"/>
@@ -230,6 +231,14 @@
 			<textField>
 				<reportElement x="256" y="18" width="100" height="20" uuid="c2323df6-f94e-40ba-9c11-6adb7383ca9f"/>
 				<textFieldExpression><![CDATA[$P{saldodebe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="341" y="18" width="100" height="20" uuid="ae9ae519-2290-4567-a3dc-f1efd60e976f"/>
+				<text><![CDATA[atraso:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="378" y="18" width="100" height="20" uuid="acefc71f-5da9-4b47-9b9f-618f30f02314"/>
+				<textFieldExpression><![CDATA[$P{atraso}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

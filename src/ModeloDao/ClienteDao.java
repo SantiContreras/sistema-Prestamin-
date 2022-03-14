@@ -45,7 +45,7 @@ public class ClienteDao implements CRUD {
 
         return c;
     }
-    
+
     public Cliente BuscarClientePorId(int id) {
         Cliente c = new Cliente();
         String sql = "Select * from cliente where id_cliente=?";
@@ -91,8 +91,8 @@ public class ClienteDao implements CRUD {
     }
 
     public int GuardarCliente(Cliente cliente) {
-        String sql = "insert into cliente(nombre , apellido ,direccion,dni , email , telefono)"
-                + "values(?,?,?,?,?,?)";
+        String sql = "insert into cliente(nombre , apellido ,direccion,dni , email , telefono,estado)"
+                + "values(?,?,?,?,?,?,?)";
         int r = 0;
         try {
             con = acceso.Conectar();
@@ -104,6 +104,7 @@ public class ClienteDao implements CRUD {
             ps.setString(4, cliente.getDni());
             ps.setString(5, cliente.getEmail());
             ps.setString(6, cliente.getTelefono());
+            ps.setString(7, cliente.getEstado());
             r = ps.executeUpdate();
         } catch (Exception e) {
             System.err.println("Error al Guardar el cliente:" + e);
@@ -130,6 +131,7 @@ public class ClienteDao implements CRUD {
                 c.setDni(rs.getString(5));
                 c.setEmail(rs.getString(6));
                 c.setTelefono(rs.getString(7));
+                c.setEstado(rs.getString(8));
                 lista.add(c);
             }
         } catch (Exception e) {
@@ -138,5 +140,31 @@ public class ClienteDao implements CRUD {
 
         return lista;
     }
+
+    public int actualizarcliente(Cliente cli) {
+        int r = 0;
+        String sql = "update cliente set nombre=?,apellido=?,direccion=?,dni=?,email=?,telefono=?,estado=? where id_cliente=?";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+
+            ps.setString(1, cli.getNombre());
+            ps.setString(2, cli.getApellido());
+            ps.setString(3, cli.getDireccion());
+            ps.setString(4, cli.getDni());
+
+            ps.setString(5, cli.getEmail());
+            ps.setString(6, cli.getTelefono());
+            ps.setString(7, cli.getEstado());
+            ps.setInt(8, cli.getId());
+
+            r = ps.executeUpdate();
+        } catch (Exception e) {
+
+        }
+        return r;
+    }
+
+   
 
 }

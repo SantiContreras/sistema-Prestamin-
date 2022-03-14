@@ -11,6 +11,9 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class PrestamoDao {
 
@@ -215,4 +218,117 @@ public class PrestamoDao {
 
         return p;
     }
+
+    public List BuscarPrestamo() {
+
+        List<Prestamo> lista = new ArrayList<>();
+        String sql = "select * from prestamo";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+          
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Prestamo pre = new Prestamo();
+                pre.setId_prestamo(rs.getInt(1));
+                pre.setId_cliente(rs.getInt(2));
+                pre.setFecha_inicio(rs.getDate(3));
+                pre.setMontoprestado(rs.getDouble(4));
+                pre.setTotalpagar(rs.getDouble(5));
+                pre.setIntereses(rs.getDouble(6));
+                pre.setCantidadcuotas(rs.getInt(7));
+                pre.setEstado(rs.getString(8));
+               
+                pre.setFormapago(rs.getString(9));
+                lista.add(pre);
+            }
+        } catch (Exception e) {
+        }
+        return lista;
+
+    }
+    
+    public List BuscarPrestamoRangoFecha(String desde , String hasta) {
+
+        List<Prestamo> lista = new ArrayList<>();
+        String sql = "select * from prestamo WHERE fechaInicio >=? and fechaInicio <= ?";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, desde);
+            ps.setString(2, hasta);
+          
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Prestamo pre = new Prestamo();
+                pre.setId_prestamo(rs.getInt(1));
+                pre.setId_cliente(rs.getInt(2));
+                pre.setFecha_inicio(rs.getDate(3));
+                pre.setMontoprestado(rs.getDouble(4));
+                pre.setTotalpagar(rs.getDouble(5));
+                pre.setIntereses(rs.getDouble(6));
+                pre.setCantidadcuotas(rs.getInt(7));
+                pre.setEstado(rs.getString(8));
+               
+                pre.setFormapago(rs.getString(9));
+                lista.add(pre);
+            }
+        } catch (Exception e) {}
+           
+        return lista;
+
+    }
+    
+    public void EliminarPrestamo(int id) {
+        
+        String sql ="DELETE FROM prestamo WHERE  id_prestamo = ?";
+            try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+         
+            ps.executeUpdate();
+            
+        } catch (Exception e) {
+        }
+            
+            
+    }
+    
+    public int ActualizarEstadoPrestamo( int id) {
+        int r=0;
+        String sql = "UPDATE prestamo set estado_prestamo=\"CANCELADO\" WHERE id_prestamo=?;";
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+            
+          
+           
+             
+            r = ps.executeUpdate();
+        } catch (Exception e) {
+            
+        }
+        return r;
+    }
+    
+    public int ActualizarDespuesDeEliminacionAutomatica() {
+        String sql ="INSERT into prestamo(id_cliente,fechaInicio,totalpagar,monto,intereses,cantidad_cuotas,estado_prestamo,formapago) \n" +
+"VALUES(80,\"2021-03-01\",0,0,1.2,4,\"cancelado\",\"semanal\");";
+       int r = 0;
+        try {
+            con = acceso.Conectar();
+            ps = con.prepareStatement(sql);
+
+       
+            r = ps.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Error al Guardar el prestamo:" + e);
+        }
+
+        return r;
+    
+    }
+
+
 }

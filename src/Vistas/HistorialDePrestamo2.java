@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -130,6 +131,8 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
         jLabel7 = new javax.swing.JLabel();
         saldopagado = new javax.swing.JLabel();
         saldodebe = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        atraso = new javax.swing.JLabel();
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "INFORMACION PRESTAMO", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Leelawadee UI", 0, 14))); // NOI18N
 
@@ -278,7 +281,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
 
         estadoprestamo.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         estadoprestamo.setForeground(new java.awt.Color(51, 153, 0));
-        estadoprestamo.setText("EN CURSO");
+        estadoprestamo.setText("ninguno");
 
         nroprestamo.setFont(new java.awt.Font("Leelawadee UI", 0, 18)); // NOI18N
         nroprestamo.setText("000021");
@@ -290,10 +293,8 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
         jLabel9.setText("Tel:");
 
         TelCli.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        TelCli.setText("jLabel19");
 
         NomCli.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        NomCli.setText("jLabel24");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -354,6 +355,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tablaclientes);
 
+        txtfiltro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 153, 0), 1, true));
         txtfiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtfiltroActionPerformed(evt);
@@ -388,12 +390,13 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                 .addGap(31, 31, 31))
         );
 
@@ -405,7 +408,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "NRO PRESTAMO", "FECHA DE PAGO", "MONTO CUOTA", "NRO CUOTA", "ESTADO"
+                "NRO PRESTAMO", "ABONADO", "MONTO CUOTA", "FECHA DE PAGO", "NRO CUOTA", "ESTADO"
             }
         ));
         TablaResumenCuotas.setRowHeight(20);
@@ -564,6 +567,12 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
 
         saldodebe.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
+        jLabel19.setFont(new java.awt.Font("Leelawadee UI", 0, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel19.setText("saldo atraso:");
+
+        atraso.setText("jLabel24");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -578,16 +587,21 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(29, 29, 29)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel4)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel5)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(saldopagado))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(saldodebe)))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel19)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(saldopagado))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(saldodebe)))
+                                        .addComponent(atraso)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -625,6 +639,10 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel7)
                                     .addComponent(saldodebe))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel19)
+                                    .addComponent(atraso))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(0, 12, Short.MAX_VALUE))
         );
@@ -642,7 +660,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 4, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         pack();
@@ -679,24 +697,29 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
         telefono = clienteresumen.getTelefono();
         modelo2 = (DefaultTableModel) TablaResumenCuotas.getModel();
         lista = cuodao.BuscarCuotas(id);
+        if(lista.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El cliente no tiene prestamos vigente");
+        }
         NomCli.setText(nombre+" "+apellido);
         TelCli.setText(telefono);
 
         SaldoCliente saldocli = saldodao.BuscarSaldo(id);
         double saldopag = saldocli.getSaldoacreedor();
         double saldodeb = saldocli.getSalgodeudor();
+        double sm = saldocli.getSaldomoroso();
         saldopagado.setText(Double.toString(saldopag));
         saldodebe.setText(Double.toString(saldodeb));
+        atraso.setText(Double.toString(sm));
 
-        Object[] objeto = new Object[5];
+        Object[] objeto = new Object[6];
 
         for (int i = 0; i < lista.size(); i++) {
             objeto[0] = lista.get(i).getIdprestamo();
-            //objeto[1] = lista.get(i).getIdcuota();
+            objeto[1] = lista.get(i).getAbonado();
             objeto[2] = lista.get(i).getMonto();
-            objeto[1] = lista.get(i).getFechapago();
-            objeto[3] = lista.get(i).getNumero_cuota();
-            objeto[4] = lista.get(i).getEstadocuota();
+            objeto[3] = lista.get(i).getFechapago();
+            objeto[4] = lista.get(i).getNumero_cuota();
+            objeto[5] = lista.get(i).getEstadocuota();
 
             modelo2.addRow(objeto);
 
@@ -722,6 +745,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
             parametro.put("estadocuenta", estadoprestamo.getText());
             parametro.put("saldopagado", saldopagado.getText());
             parametro.put("saldodebe", saldodebe.getText());
+             parametro.put("atraso", atraso.getText());
 
             parametro.put("fondoimagen", "C:\\Users\\santi\\Documents\\NetBeansProjects\\Prestamin\\src\\Iconos\\Prestamin2.png");
             JasperPrint pirnt = JasperFillManager.fillReport(reporte, parametro, new JRBeanCollectionDataSource(lista));
@@ -777,6 +801,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel NomCli;
     private javax.swing.JTable TablaResumenCuotas;
     private javax.swing.JLabel TelCli;
+    private javax.swing.JLabel atraso;
     private javax.swing.JButton btndescargar;
     private javax.swing.JLabel estadoprestamo;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -790,6 +815,7 @@ public class HistorialDePrestamo2 extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;

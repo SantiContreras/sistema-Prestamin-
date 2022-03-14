@@ -9,8 +9,10 @@ package Modelo;
  * @author santi
  */
 public class SaldoCliente {
+
     int idcliente;
-    
+  
+
     double salgodeudor;
     double saldoacreedor;
     double saldomoroso;
@@ -18,12 +20,13 @@ public class SaldoCliente {
     public SaldoCliente() {
     }
 
-    public SaldoCliente(int idcliente,  double salgodeudor, double saldoacreedor, double saldomoroso) {
+    public SaldoCliente(int idcliente, double salgodeudor, double saldoacreedor, double saldomoroso) {
         this.idcliente = idcliente;
-       
+
         this.salgodeudor = salgodeudor;
         this.saldoacreedor = saldoacreedor;
         this.saldomoroso = saldomoroso;
+        
     }
 
     public int getIdcliente() {
@@ -34,9 +37,7 @@ public class SaldoCliente {
         this.idcliente = idcliente;
     }
 
-  
-
-   
+ 
 
     public double getSalgodeudor() {
         return salgodeudor;
@@ -61,5 +62,5 @@ public class SaldoCliente {
     public void setSaldomoroso(double saldomoroso) {
         this.saldomoroso = saldomoroso;
     }
-    
+
 }

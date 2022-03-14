@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="103333a3-25f0-423f-b74a-ad26ff61d835">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="249"/>
+	<property name="ireport.y" value="132"/>
 	<parameter name="nombre" class="java.lang.String"/>
 	<parameter name="telefono" class="java.lang.String"/>
 	<parameter name="montocuota" class="java.lang.String"/>
@@ -13,6 +13,8 @@
 	<parameter name="fondoimagen" class="java.lang.String"/>
 	<parameter name="EstadoCuota" class="java.lang.String"/>
 	<parameter name="EstadoCuenta" class="java.lang.String"/>
+	<parameter name="abonado" class="java.lang.String"/>
+	<parameter name="atraso" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -147,6 +149,22 @@
 			<textField>
 				<reportElement x="61" y="108" width="100" height="20" uuid="e347520b-95e1-4973-b105-800d3479f27f"/>
 				<textFieldExpression><![CDATA[$P{EstadoCuota}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="186" y="108" width="65" height="20" uuid="9dbeb136-565d-406b-8dc6-79fa42a12b9d"/>
+				<text><![CDATA[Abonodo: $]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="286" y="108" width="72" height="20" uuid="305a06c4-4aae-46db-af92-6d2583d3d00a"/>
+				<textFieldExpression><![CDATA[$P{abonado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="398" y="108" width="52" height="20" uuid="c20c9cf6-c9e1-4e8f-8273-c739cf072cb9"/>
+				<text><![CDATA[atraso:  $]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="108" width="69" height="20" uuid="95e6cd5d-2ab0-4b84-bcfc-119a6e91e6a5"/>
+				<textFieldExpression><![CDATA[$P{atraso}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
